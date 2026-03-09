@@ -1,0 +1,3 @@
+# Exclude large model files from Cloudflare Pages deployment
+# These should be hosted on R2 storage instead
+models/

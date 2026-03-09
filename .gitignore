@@ -1,0 +1,36 @@
+# Dependencies
+node_modules/
+
+# Build
+dist/
+
+# Logs
+*.log
+
+# Editor
+.vscode/
+.idea/
+*.md
+!readme.md
+/frames
+*.mp4
+*.jpg
+*.png
+.wrangler/
+!cloud.png
+*.glb
+!public-deploy/models/building-preview.glb
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Environment
+.env
+.env.local
+.env.*.local
+.dev.vars
+
+# Claude
+.claude/
+CLAUDE.md
