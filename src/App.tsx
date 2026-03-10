@@ -1,7 +1,7 @@
 import { useEffect } from 'react'
 import { MysticalLayout } from './components/Layout'
 import { MysticalScene } from './components/Scene'
-import { MysticalInfoPanel, FullscreenToggle, ShareButton } from './components/UI'
+import { MysticalInfoPanel, FullscreenToggle, ShareButton, WhatsAppButton } from './components/UI'
 import { ErrorBoundary } from './components/ErrorBoundary'
 import { useKeyboardNavigation } from './hooks/useKeyboardNavigation'
 import { useAdminStore } from './store/useAdminStore'
@@ -26,6 +26,7 @@ export default function App() {
   return (
     <ErrorBoundary>
       <div className="fixed right-4 top-4 z-50 flex gap-2" data-html2canvas-ignore>
+        <WhatsAppButton />
         <ShareButton />
         <FullscreenToggle />
       </div>
