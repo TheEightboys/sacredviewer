@@ -49,7 +49,7 @@ export function BuildingViewer() {
   const setIsLoading = useStore((state) => state.setIsLoading);
   const setLoadingProgress = useStore((state) => state.setLoadingProgress);
   const setLoadingPhase = useStore((state) => state.setLoadingPhase);
-  const [modelLoaded, setModelLoaded] = useState(false);
+  const [, setModelLoaded] = useState(false);
   const [revealed, setRevealed] = useState(false);
 
   // Update loading phase when script becomes ready
