@@ -17,13 +17,14 @@ export function MysticalInfoPanel() {
     <div className="relative flex h-full flex-col">
 
       {/* Content - no cards, just floating content */}
-      <div className="relative z-10 flex h-full flex-col p-4 pt-16">
+      <div className="relative z-10 flex h-full flex-col p-3 pt-10 md:p-4 md:pt-14">
         {/* Scrollable content - title is now in center header */}
         <div className="flex-1 overflow-y-auto">
           {/* Video - no card, just the player */}
           {hasVideo && (
             <motion.div
-              className="mb-4 overflow-hidden rounded-lg"
+              className="mb-3 md:mb-4 overflow-hidden rounded-lg"
+              style={{ aspectRatio: '16/9', maxHeight: '60%' }}
               initial={{ opacity: 0, y: 20 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ delay: 0.2 }}

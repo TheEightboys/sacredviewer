@@ -228,18 +228,13 @@ function VideoContent({ markerId }: VideoContentProps) {
       transition={{ duration: 0.4, ease: 'easeOut' }}
       className="flex h-full flex-col p-3 sm:p-6"
     >
-      {/* Header */}
-      <div className="mb-2 sm:mb-4">
-        <h2 className="text-lg font-bold text-white sm:text-2xl">{marker.title}</h2>
-        {marker.description && (
-          <p className="mt-0.5 text-sm text-slate-400 sm:mt-1 sm:text-base">{marker.description}</p>
-        )}
-      </div>
+
 
       {/* Video Container */}
       <div
         ref={containerRef}
-        className="group relative flex-1 overflow-hidden rounded-lg bg-black"
+        className="group relative flex-1 overflow-hidden rounded-lg"
+        style={{ background: 'transparent' }}
         onMouseMove={resetControlsTimeout}
         onMouseLeave={() => isPlaying && setShowControls(false)}
       >
@@ -248,7 +243,7 @@ function VideoContent({ markerId }: VideoContentProps) {
             <video
               ref={videoRef}
               src={marker.videoUrl}
-              className="h-full w-full object-contain"
+              className="h-full w-full object-cover rounded-lg"
               data-html2canvas-ignore
               onClick={togglePlayPause}
               onTimeUpdate={handleTimeUpdate}

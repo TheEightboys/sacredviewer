@@ -1,7 +1,8 @@
-import { ReactNode, useMemo, useEffect, useState } from 'react'
+import { ReactNode, useMemo, useEffect, useState, useRef } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import { useStore } from '../../store/useStore'
 import { useAdminStore } from '../../store/useAdminStore'
+import { TemplePreloader } from '../UI/TemplePreloader'
 
 interface MysticalLayoutProps {
   children: ReactNode
@@ -150,59 +151,38 @@ function MistLayers() {
   )
 }
 
-// Loading overlay - "Entering Sacred Viewer..."
-function LoadingOverlay() {
-  return (
-    <motion.div
-      className="absolute inset-0 z-50 flex items-center justify-center"
-      style={{ background: 'linear-gradient(to bottom, #1e3a5f 0%, #152540 50%, #0a1525 100%)' }}
-      initial={{ opacity: 1 }}
-      exit={{ opacity: 0 }}
-      transition={{ duration: 0.8, ease: 'easeOut' }}
-    >
-      <div className="text-center">
-        <motion.div
-          initial={{ opacity: 0, y: 10 }}
-          animate={{ opacity: 1, y: 0 }}
-          transition={{ delay: 0.1 }}
-        >
-          <h2
-            className="font-mystical text-2xl font-semibold tracking-wider md:text-3xl"
-            style={{
-              color: '#c9a227',
-              textShadow: '0 0 20px rgba(201, 162, 39, 0.5)',
-              fontStyle: 'italic',
-            }}
-          >
-            Entering sacred viewer&hellip;
-          </h2>
-        </motion.div>
+// Loading is now handled by TemplePreloader component
 
-        {/* Animated dots / pulse indicator */}
-        <motion.div
-          className="mx-auto mt-6 flex justify-center gap-2"
-          initial={{ opacity: 0 }}
-          animate={{ opacity: 1 }}
-          transition={{ delay: 0.3 }}
-        >
-          {[0, 1, 2].map((i) => (
-            <motion.div
-              key={i}
-              className="h-2 w-2 rounded-full"
-              style={{ background: '#c9a227' }}
-              animate={{ opacity: [0.3, 1, 0.3], scale: [0.8, 1.2, 0.8] }}
-              transition={{ duration: 1.2, repeat: Infinity, delay: i * 0.2, ease: 'easeInOut' }}
-            />
-          ))}
-        </motion.div>
-      </div>
-    </motion.div>
-  )
+// Rain effect — CSS-only for smooth 60fps performance
+function RainEffect() {
+  const containerRef = useRef<HTMLDivElement>(null)
+
+  useEffect(() => {
+    const container = containerRef.current
+    if (!container) return
+    const count = window.innerWidth < 768 ? 40 : 80
+    const frag = document.createDocumentFragment()
+
+    for (let i = 0; i < count; i++) {
+      const drop = document.createElement('div')
+      drop.className = 'rain-drop'
+      const left = Math.random() * 100
+      const height = Math.random() * 18 + 12
+      const duration = Math.random() * 0.8 + 0.6
+      const delay = Math.random() * 2
+      drop.style.cssText = `left:${left}%;height:${height}px;animation-duration:${duration}s;animation-delay:${delay}s;`
+      frag.appendChild(drop)
+    }
+    container.appendChild(frag)
+
+    return () => { container.innerHTML = '' }
+  }, [])
+
+  return <div ref={containerRef} className="rain-container" />
 }
 
 export function MysticalLayout({ children, title = 'Sacred Viewer', infoPanel }: MysticalLayoutProps) {
   const selectedMarker = useStore((state) => state.selectedMarker)
-  const isLoading = useStore((state) => state.isLoading)
   const markers = useAdminStore((state) => state.config.markers)
   const { orientation, isMobile } = useDeviceOrientation()
   const [dismissedRotatePrompt, setDismissedRotatePrompt] = useState(false)
@@ -227,23 +207,46 @@ export function MysticalLayout({ children, title = 'Sacred Viewer', infoPanel }:
         {showRotatePrompt && <RotateDevicePrompt onDismiss={() => setDismissedRotatePrompt(true)} />}
       </AnimatePresence>
 
-      {/* Full screen 3D Scene - always covers entire screen */}
+      {/* 3D Scene — full screen background */}
       <div className="absolute inset-0">
         {children}
+
+        {/* Rain overlay */}
+        <RainEffect />
 
         {/* Atmospheric effects overlay */}
         <AtmosphericParticles />
         <MistLayers />
       </div>
 
-      {/* Video panel overlay - Desktop: right side, Mobile: bottom */}
+      {/* Video panel overlay - Desktop: right side, Mobile: bottom with smooth gap */}
       {infoPanel && (
         <motion.div
           className="absolute z-20"
           style={
             isMobile
-              ? { bottom: 0, left: 0, right: 0, height: '40%' }
-              : { top: 0, right: 0, bottom: 0, width: '45%' }
+              ? {
+                  bottom: 0,
+                  left: 0,
+                  right: 0,
+                  height: '38%',
+                  borderTopLeftRadius: 16,
+                  borderTopRightRadius: 16,
+                  background: 'linear-gradient(to bottom, rgba(10,15,25,0.85) 0%, rgba(10,15,25,0.95) 100%)',
+                  boxShadow: '0 -4px 30px rgba(0,0,0,0.5)',
+                  borderTop: '1px solid rgba(212,168,83,0.15)',
+                }
+              : {
+                  top: 0,
+                  right: 0,
+                  bottom: 0,
+                  width: '40%',
+                  maxWidth: 520,
+                  background: 'linear-gradient(180deg, rgba(14,20,35,0.92) 0%, rgba(10,15,25,0.96) 100%)',
+                  backdropFilter: 'blur(12px)',
+                  WebkitBackdropFilter: 'blur(12px)',
+                  borderLeft: '1px solid rgba(212,168,83,0.12)',
+                }
           }
           initial={isMobile ? { y: '100%' } : { x: '100%' }}
           animate={isMobile ? { y: 0 } : { x: 0 }}
@@ -272,10 +275,8 @@ export function MysticalLayout({ children, title = 'Sacred Viewer', infoPanel }:
         </h1>
       </motion.div>
 
-      {/* Loading overlay - shows "Entering sacred viewer..." until first model is ready */}
-      <AnimatePresence>
-        {isLoading && <LoadingOverlay />}
-      </AnimatePresence>
+      {/* Temple-themed preloader — covers everything until model is loaded */}
+      <TemplePreloader />
     </div>
   )
 }

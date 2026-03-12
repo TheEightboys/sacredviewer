@@ -8,6 +8,10 @@ interface AppState {
   selectPrevMarker: () => void
   isLoading: boolean
   setIsLoading: (loading: boolean) => void
+  loadingProgress: number
+  setLoadingProgress: (progress: number) => void
+  loadingPhase: string
+  setLoadingPhase: (phase: string) => void
 }
 
 // Helper to get marker IDs from admin store
@@ -45,4 +49,8 @@ export const useStore = create<AppState>((set, get) => ({
 
   isLoading: true,
   setIsLoading: (loading) => set({ isLoading: loading }),
+  loadingProgress: 0,
+  setLoadingProgress: (progress) => set({ loadingProgress: progress }),
+  loadingPhase: 'Awakening sacred geometry…',
+  setLoadingPhase: (phase) => set({ loadingPhase: phase }),
 }))

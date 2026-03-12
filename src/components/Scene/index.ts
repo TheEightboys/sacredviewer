@@ -1,6 +1,6 @@
 export { Scene } from './Scene'
 export { SceneContainer } from './SceneContainer'
-export { MysticalScene } from './MysticalScene'
+export { BuildingViewer as MysticalScene } from './BuildingViewer'
 export { BuildingModel } from './BuildingModel'
 export { Marker } from './Marker'
 export { MysticalMarker } from './MysticalMarker'

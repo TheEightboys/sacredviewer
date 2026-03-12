@@ -82,6 +82,90 @@ body,
   50% { filter: brightness(1.1) drop-shadow(0 0 15px var(--gold-glow)); }
 }
 
+/* Temple preloader silhouette glow pulse */
+.preloader-temple {
+  filter: drop-shadow(0 0 6px rgba(212, 168, 83, 0.25));
+  animation: temple-breathe 3s ease-in-out infinite;
+}
+
+@keyframes temple-breathe {
+  0%, 100% { filter: drop-shadow(0 0 4px rgba(212, 168, 83, 0.15)); }
+  50% { filter: drop-shadow(0 0 14px rgba(212, 168, 83, 0.4)); }
+}
+
+/* Temple stroke-draw animation — silky CSS only */
+.temple-draw {
+  stroke-dasharray: 1000;
+  stroke-dashoffset: 1000;
+  animation: draw-stroke 2.2s ease-in-out forwards;
+  animation-delay: var(--d, 0s);
+}
+
+@keyframes draw-stroke {
+  to { stroke-dashoffset: 0; }
+}
+
+/* Preloader mandala rings — pure CSS for 60fps */
+.preloader-ring {
+  position: absolute;
+  border-radius: 50%;
+  border: 1px solid rgba(212, 168, 83, 0.08);
+  border-top-color: rgba(212, 168, 83, 0.25);
+  border-right-color: rgba(212, 168, 83, 0.15);
+}
+
+.preloader-ring-1 {
+  width: 260px; height: 260px;
+  animation: spin-ring 12s linear infinite;
+}
+.preloader-ring-2 {
+  width: 340px; height: 340px;
+  animation: spin-ring 18s linear infinite reverse;
+}
+.preloader-ring-3 {
+  width: 420px; height: 420px;
+  animation: spin-ring 25s linear infinite;
+  border-style: dashed;
+  border-width: 1px;
+}
+
+@keyframes spin-ring {
+  to { transform: rotate(360deg); }
+}
+
+/* Preloader glow pulse */
+.preloader-glow {
+  animation: glow-pulse 3s ease-in-out infinite;
+}
+@keyframes glow-pulse {
+  0%, 100% { opacity: 0.6; }
+  50% { opacity: 1; }
+}
+
+/* ═══ Rain Effect ═══ */
+.rain-container {
+  position: absolute;
+  inset: 0;
+  overflow: hidden;
+  pointer-events: none;
+  z-index: 1;
+}
+
+.rain-drop {
+  position: absolute;
+  top: -10%;
+  width: 1px;
+  background: linear-gradient(to bottom, transparent, rgba(160, 200, 240, 0.25), transparent);
+  animation: rain-fall linear infinite;
+}
+
+@keyframes rain-fall {
+  0% { transform: translateY(-10vh); opacity: 0; }
+  10% { opacity: 1; }
+  90% { opacity: 1; }
+  100% { transform: translateY(110vh); opacity: 0; }
+}
+
 /* Mystical button styles */
 .btn-mystical {
   background: linear-gradient(180deg, rgba(212, 168, 83, 0.2) 0%, rgba(139, 105, 20, 0.3) 100%);
